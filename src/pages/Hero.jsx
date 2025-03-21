@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import "./css/Hero.css"
 import COMPUTER from "../assets/images/images/computer.png"
 
@@ -6,51 +6,41 @@ import {gsap} from "gsap";
 import {useGSAP} from "@gsap/react";
 
 const Hero = () => {
+    const mouseRef = useRef()
 
-    useGSAP(() => {
-        let tl = gsap.timeline()
-        tl.from("#heroTop h1", {
-            y: 300,
-            delay: 0.5
-        }, "heroH1")
-        tl.from("#middleLeft h1", {
-            y: 300,
-            delay: 0.5
-        }, "heroH1")
-
-
-        tl.from("#imageBox", {
-            width: 0
-        },"2ndAni")
-        tl.to("#imageBox img", {
-            scale: 1,
-            ease: "expo.out",
-
+  const mouseMoving = (e) => {
+        console.log(e)
+        let mouseElement = mouseRef.current
+        const mouseWidth = mouseElement.offsetWidth;
+        const mouseHeight = mouseElement.offsetHeight;
+        gsap.to("#mouse", {
+            x: e.pageX - mouseWidth,
+            y: e.pageY - mouseHeight,
+            ease: "power2.out"
         })
-        tl.from("#heroBottom",{
-            width:0
-        },"2ndAni")
 
-    }, {scope: "#heroContainer"})
-
-
+    }
     return (
-        <div id={"heroContainer"}>
-            <div id="heroTop">
-                <h1>I turn <span id={"textCircuit"}>Tech</span></h1>
-            </div>
-            <div id="heroMiddle">
-                <div id="middleLeft">
-                    <h1>Into ART</h1>
+        <>
+
+            <div id="mouse" ref={mouseRef}></div>
+            <div id={"heroContainer"} onMouseMove={mouseMoving}>
+                <div id="heroTop">
+                    <h1>I turn <span id={"textCircuit"}>Tech</span></h1>
                 </div>
-                <div id="middleRight">
-                    <div id="imageBox">
-                        <img src={COMPUTER} alt="comp"/>
+                <div id="heroMiddle">
+                    <div id="middleLeft">
+                        <h1>Into ART</h1>
+                    </div>
+                    <div id="middleRight">
+                        <div id="imageBox">
+                            <img src={COMPUTER} alt="comp"/>
+                        </div>
                     </div>
                 </div>
+                <div id="heroBottom"></div>
             </div>
-            <div id="heroBottom"></div>
-        </div>
+        </>
     );
 };
 
